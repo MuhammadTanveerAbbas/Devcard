@@ -186,5 +186,5 @@ Works on any Node.js 18+ host  Railway, Render, Fly.io, etc.
 MIT © [Muhammad Tanveer Abbas](https://themvpguy.vercel.app/)
 
 - X: [x.com/m_tanveerabas](https://x.com/m_tanveerabas)
-- LinkedIn: [linkedin.com/in/muhammadtanveerabas](https://linkedin.com/in/muhammadtanveerabas)
-- GitHub: [github.com/muhammadtanveerabas](https://github.com/muhammadtanveerabas)
+- LinkedIn: [linkedin.com/in/muhammadtanveerabbas](https://linkedin.com/in/muhammadtanveerabbas)
+- GitHub: [github.com/muhammadtanveerabbas](https://github.com/muhammadtanveerabbas)
