@@ -1,6 +1,6 @@
 # DevCard
 
-An interactive 3D developer profile card  share your links, social profiles, and payment options in one polished page.
+An interactive 3D developer profile card share your links, social profiles, and payment options in one polished page.
 
 Live demo: [themvpguy.vercel.app](https://themvpguy.vercel.app/)
 
@@ -36,21 +36,21 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## How to customize it for yourself
 
-Everything you need to change lives in one place  the `PROFILE` constant at the top of `components/profile-card.tsx`.
+Everything you need to change lives in one place the `PROFILE` constant at the top of `components/profile-card.tsx`.
 
 ```ts
 const PROFILE = {
   name: "Your Name",
-  title: "Your Title",           // shown in the pill badge below your name
-  status: "Available for Work",  // the green dot line  change or remove
+  title: "Your Title", // shown in the pill badge below your name
+  status: "Available for Work", // the green dot line  change or remove
   about: "Your one-liner bio.",
 
-  profileImage: "/Me.jfif",      // drop your photo in /public and update this path
+  profileImage: "/Me.jfif", // drop your photo in /public and update this path
 
   email: "you@example.com",
-  calUrl: "https://cal.com/yourhandle",       // Book a Call button
-  portfolioUrl: "https://yoursite.com",       // Portfolio button
-  cvUrl: "/Resume.pdf",                           // drop your PDF in /public
+  calUrl: "https://cal.com/yourhandle", // Book a Call button
+  portfolioUrl: "https://yoursite.com", // Portfolio button
+  cvUrl: "/Resume.pdf", // drop your PDF in /public
 
   // Social links  leave as "" to hide that icon
   twitterUrl: "https://x.com/yourhandle",
@@ -60,8 +60,17 @@ const PROFILE = {
   devtoUrl: "https://dev.to/yourhandle",
 
   // Skill badges  add, remove, or rename freely
-  skills: ["Next.js", "React", "TypeScript", "Node.js", "Stripe", "Auth", "PostgreSQL", "Vercel"],
-}
+  skills: [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Node.js",
+    "Stripe",
+    "Auth",
+    "PostgreSQL",
+    "Vercel",
+  ],
+};
 ```
 
 That's it. Save the file and the card updates instantly.
@@ -92,7 +101,7 @@ cvUrl: "/YourName-Resume.pdf",
 
 ## Hiding buttons or social icons
 
-Set the value to an empty string `""`  the button/icon won't render at all:
+Set the value to an empty string `""` the button/icon won't render at all:
 
 ```ts
 calUrl: "",        // hides Book a Call
@@ -107,9 +116,9 @@ devtoUrl: "",      // hides Dev.to icon
 Update the `status` field:
 
 ```ts
-status: "Open to Freelance"
+status: "Open to Freelance";
 // or
-status: "Not Available"
+status: "Not Available";
 ```
 
 To remove it entirely, delete the status line and remove the status block from the JSX in `components/profile-card.tsx`.
@@ -118,7 +127,7 @@ To remove it entirely, delete the status line and remove the status block from t
 
 ## Environment variables
 
-None required. This is a fully static frontend app  no backend, no database, no API keys needed.
+None required. This is a fully static frontend app no backend, no database, no API keys needed.
 
 ---
 
@@ -127,9 +136,9 @@ None required. This is a fully static frontend app  no backend, no database, no 
 - [Next.js 16](https://nextjs.org/)
 - [React 19](https://react.dev/)
 - [Tailwind CSS v4](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)  Radix UI components
-- [next-themes](https://github.com/pacocoursey/next-themes)  dark mode
-- [Lucide React](https://lucide.dev/)  icons
+- [shadcn/ui](https://ui.shadcn.com/) Radix UI components
+- [next-themes](https://github.com/pacocoursey/next-themes) dark mode
+- [Lucide React](https://lucide.dev/) icons
 - [Vercel Analytics](https://vercel.com/analytics)
 
 ---
@@ -154,7 +163,7 @@ pnpm build
 pnpm start
 ```
 
-Works on any Node.js 18+ host  Railway, Render, Fly.io, etc.
+Works on any Node.js 18+ host Railway, Render, Fly.io, etc.
 
 ---
 
@@ -185,6 +194,6 @@ Works on any Node.js 18+ host  Railway, Render, Fly.io, etc.
 
 MIT © [Muhammad Tanveer Abbas](https://themvpguy.vercel.app/)
 
-- X: [x.com/m_tanveerabas](https://x.com/m_tanveerabas)
+- X: [x.com/m_tanveerabas](https://x.com/m_tanveerabbas)
 - LinkedIn: [linkedin.com/in/muhammadtanveerabbas](https://linkedin.com/in/muhammadtanveerabbas)
 - GitHub: [github.com/muhammadtanveerabbas](https://github.com/muhammadtanveerabbas)
