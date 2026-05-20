@@ -123,3 +123,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes spin-border {
+  to { --spin-angle: 360deg; }
+}
+
+@property --spin-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.spin-border-animate {
+  animation: spin-border 8s linear infinite;
+}
