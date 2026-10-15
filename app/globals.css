@@ -75,8 +75,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-display: var(--font-familjen), 'Familjen Grotesk', system-ui, sans-serif;
+  --font-sans: var(--font-veritas), 'LT Veritas', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -121,6 +122,15 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* The pixel blast layer sits fixed behind everything at z index -10. This
+       colour paints the page canvas, under that layer, and it matches the layer
+       exactly, so a collapsing mobile toolbar, a rubber band scroll or a
+       rounded screen corner never shows a seam of a different colour. */
+    background-color: #fafafa;
+  }
+
+  html.dark body {
+    background-color: #050607;
   }
 }
 
@@ -136,4 +146,94 @@
 
 .spin-border-animate {
   animation: spin-border 8s linear infinite;
+}
+
+/* ─── Icon buttons ───────────────────────────────────────────────────────────
+   Flat on purpose. The brand marks carry the colour, so the button stays a
+   quiet neutral surface. No hover lift, the focus ring carries feedback.
+   -------------------------------------------------------------------------- */
+
+.icon-button {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* The card surface. Pure white in light, pure black in dark, so text keeps
+   full contrast no matter what animates underneath. */
+.card-surface {
+  background-color: #ffffff;
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow:
+    inset 0 0 0 1px rgb(13 18 24 / 0.07),
+    inset 0 1px 2px rgb(13 18 24 / 0.05);
+}
+
+.dark .card-surface {
+  background-color: #000000;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.09),
+    inset 0 1px 2px rgb(255 255 255 / 0.04);
+}
+
+/* ─── Card rhythm ───────────────────────────────────────────────────────────
+   The card must fit the viewport without scrolling inside it. On short
+   screens every vertical value tightens through these variables, so the whole
+   layout shrinks as one piece instead of breaking in places.
+   -------------------------------------------------------------------------- */
+
+.card-body {
+  --pad-x: 16px;
+  --pad-t: 54px;
+  --pad-b: 22px;
+  --avatar: 82px;
+  --gap: 13px;
+  --name: 1.42rem;
+  --title: 0.9rem;
+  --control-h: 40px;
+  --top-h: 32px;
+  --icon-btn: 28px;
+  --tile-h: 76px;
+  --body-text: 12px;
+}
+
+@media (max-height: 730px) {
+  .card-body {
+    --pad-x: 14px;
+    --pad-t: 44px;
+    --pad-b: 16px;
+    --avatar: 66px;
+    --gap: 10px;
+    --name: 1.2rem;
+    --title: 0.8rem;
+    --control-h: 36px;
+    --icon-btn: 26px;
+    --tile-h: 66px;
+    --body-text: 11px;
+  }
+}
+
+@media (max-height: 600px) {
+  .card-body {
+    --pad-t: 38px;
+    --pad-b: 12px;
+    --avatar: 58px;
+    --gap: 8px;
+    --name: 1.08rem;
+    --control-h: 32px;
+    --icon-btn: 24px;
+    --tile-h: 60px;
+    --body-text: 10.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

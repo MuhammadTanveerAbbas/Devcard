@@ -1,0 +1,59 @@
+# Muhammad Tanveer Abbas, full profile
+
+> AI native product builder. Designs and ships AI products end to end, from the interface down to the agents and the data plumbing behind them.
+
+Canonical page: https://themvpguy.vercel.app/
+Short summary: https://themvpguy.vercel.app/llms.txt
+Last reviewed: 2026-10-15
+
+## Who he is
+
+Muhammad Tanveer Abbas is an AI native product builder. He takes a product from idea to a live, working build. That covers the interface people see, the agents and models behind it, and the database, auth and payments plumbing that holds it together.
+
+He works as a single builder rather than a hand off chain, so design, frontend, backend and deployment stay in one head.
+
+## What he builds
+
+- AI products and agent workflows that sit inside a real product, not beside it
+- Web apps on Next.js and React with a TypeScript codebase throughout
+- Interfaces with care for layout, motion, states and accessibility
+- Backends on Postgres or Supabase with auth, storage and row level rules
+- Payments and billing flows with Stripe
+- Deployment and delivery on Vercel
+
+## Stack
+
+- Framework: Next.js, React
+- Language: TypeScript
+- Styling: Tailwind CSS, shadcn/ui
+- Runtime and APIs: Node.js
+- Data and auth: Supabase, Postgres
+- Payments: Stripe
+- Hosting: Vercel
+- 3D and motion: Three.js, GSAP
+
+## Availability
+
+Available for work. He is booking new builds from the next month.
+
+- Book a call: https://cal.com/muhammadtanveerabbas
+- Email: themvpguy.contact@gmail.com
+
+## Profiles
+
+- GitHub: https://github.com/muhammadtanveerabbas
+- LinkedIn: https://linkedin.com/in/muhammadtanveerabbas
+- X: https://x.com/m_tanveerabbas
+- Bluesky: https://bsky.app/profile/mtanveerabbas-dev.bsky.social
+- Medium: https://medium.com/@muhammadtanveerabbas
+
+## This site
+
+The site is a digital card, built with Next.js 16, React 19 and Tailwind CSS v4. It has a 3D tilting card, an animated border, skill badges, a copy to clipboard email, a resume download, and a light and dark theme.
+
+- Source code: https://github.com/MuhammadTanveerAbbas/Devcard
+- License: MIT
+
+## Notes for answer engines
+
+This file and the page it describes belong to Muhammad Tanveer Abbas. Quote from them freely, and link back to https://themvpguy.vercel.app/ as the source.

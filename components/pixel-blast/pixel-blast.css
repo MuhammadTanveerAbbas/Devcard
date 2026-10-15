@@ -1,0 +1,37 @@
+.pixel-blast-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* The field is decorative. It never takes part in hit testing, so the card,
+     the buttons and the links above it keep every event. */
+  pointer-events: none;
+}
+
+.pixel-blast-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Static fallback: reduced-motion visitors and WebGL failures only. No dot
+   grid so there is no visible swap when the canvas later loads over this.
+   Soft vignette only. */
+.pixel-blast-static {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 15%, rgb(0 0 0 / 0.05), transparent 46%),
+    radial-gradient(circle at 78% 76%, rgb(0 0 0 / 0.04), transparent 46%);
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+
+.dark .pixel-blast-static {
+  background-image:
+    radial-gradient(circle at 20% 15%, rgb(255 255 255 / 0.04), transparent 46%),
+    radial-gradient(circle at 78% 76%, rgb(255 255 255 / 0.03), transparent 46%);
+}

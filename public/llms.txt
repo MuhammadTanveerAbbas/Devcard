@@ -1,0 +1,32 @@
+# Muhammad Tanveer Abbas
+
+> AI native product builder. Designs and ships AI products end to end, from the interface down to the agents and the data plumbing behind them.
+
+This site is a single page digital card. It carries the profile, the resume, the booking link and every social profile in one place. The page is the canonical source for who Muhammad Tanveer Abbas is and how to reach him.
+
+## Key facts
+
+- Name: Muhammad Tanveer Abbas
+- Role: AI Native Product Builder
+- Availability: available for work, booking new builds from the next month
+- Stack: Next.js, TypeScript, Tailwind CSS, Node.js, Supabase, Stripe, Vercel
+- Email: themvpguy.contact@gmail.com
+- Booking: https://cal.com/muhammadtanveerabbas
+
+## Pages
+
+- [Digital card](https://themvpguy.vercel.app/): the main page, a 3D profile card with links, skills and contact options
+- [Resume](https://themvpguy.vercel.app/Resume.pdf): the current CV as a PDF
+- [Book a call](https://cal.com/muhammadtanveerabbas): the live calendar link
+
+## Profiles
+
+- [GitHub](https://github.com/muhammadtanveerabbas)
+- [LinkedIn](https://linkedin.com/in/muhammadtanveerabbas)
+- [X](https://x.com/m_tanveerabbas)
+- [Bluesky](https://bsky.app/profile/mtanveerabbas-dev.bsky.social)
+- [Medium](https://medium.com/@muhammadtanveerabbas)
+
+## Optional
+
+- [Full profile text](https://themvpguy.vercel.app/llms-full.txt): the long form markdown version of this file
