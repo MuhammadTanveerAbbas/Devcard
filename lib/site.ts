@@ -69,10 +69,10 @@ export const SKILLS = [
 export const SOCIALS = [
   { label: "LinkedIn", url: "https://linkedin.com/in/muhammadtanveerabbas" },
   { label: "GitHub", url: "https://github.com/muhammadtanveerabbas" },
-  { label: "X", url: "https://x.com/buildwithmta" },
+  { label: "X", url: "https://x.com/m_tanveerabbas" },
   { label: "Bluesky", url: "https://bsky.app/profile/mtanveerabbas-dev.bsky.social" },
   { label: "Medium", url: "https://medium.com/@muhammadtanveerabbas" },
 ];
 
 /** X handle, used by the Twitter card tags. */
-export const X_HANDLE = "@buildwithmta";
+export const X_HANDLE = "@m_tanveerabbas";
