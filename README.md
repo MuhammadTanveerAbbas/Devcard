@@ -22,7 +22,7 @@ Live demo: [themvpguy.vercel.app](https://themvpguy.vercel.app/)
 - Favicon and app icons in every size, sharp on phones, tablets and 4K screens
 - Structured data, sitemap, robots rules and LLM text files for search and AI crawlers
 - Fully responsive on all screen sizes
-- Dithered pixel backdrop that always shows, and that reacts to mouse and touch in the backdrop only
+- Dithered pixel backdrop that reacts to mouse and touch in the backdrop only, hidden on small screens (under 768px wide) so phones show the plain page colour and save battery
 
 ---
 
@@ -31,6 +31,7 @@ Live demo: [themvpguy.vercel.app](https://themvpguy.vercel.app/)
 The backdrop is a dithered pixel field drawn with Three.js. It is built to look right on every screen:
 
 - It covers the whole viewport on any screen size, from a small phone to a 4K monitor. The canvas follows the element box and the drawing buffer follows the device pixel ratio, so the pixel grid stays the same visual size everywhere
+- The field is hidden on screens under 768px wide. The page body colour matches the backdrop colour exactly (`#fafafa` light, `#050607` dark), so nothing looks empty and no seam shows
 - A static pixel layer paints on the first frame and stays whenever the animated field cannot run, so the backdrop is never a flat colour or a blank canvas
   - while the animated field is still downloading
   - when the visitor asked for reduced motion

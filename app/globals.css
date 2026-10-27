@@ -125,8 +125,10 @@
     /* The pixel blast layer sits fixed behind everything at z index -10. This
        colour paints the page canvas, under that layer, and it matches the layer
        exactly, so a collapsing mobile toolbar, a rubber band scroll or a
-       rounded screen corner never shows a seam of a different colour. */
-    background-color: #fafafa;
+       rounded screen corner never shows a seam of a different colour.
+       Uses the adaptive --background variable so light/white theme tracks the
+       theme colour instead of a hardcoded hex. */
+    background-color: var(--background);
   }
 
   html.dark body {
@@ -186,11 +188,11 @@
   --pad-x: 16px;
   --pad-t: 54px;
   --pad-b: 22px;
-  --avatar: 82px;
+  --avatar: 72px;
   --gap: 13px;
   --name: 1.42rem;
   --title: 0.9rem;
-  --control-h: 40px;
+  --control-h: 43px;
   --top-h: 32px;
   --icon-btn: 28px;
   --tile-h: 76px;
@@ -202,11 +204,11 @@
     --pad-x: 14px;
     --pad-t: 44px;
     --pad-b: 16px;
-    --avatar: 66px;
+    --avatar: 60px;
     --gap: 10px;
     --name: 1.2rem;
     --title: 0.8rem;
-    --control-h: 36px;
+    --control-h: 38px;
     --icon-btn: 26px;
     --tile-h: 66px;
     --body-text: 11px;
@@ -217,12 +219,31 @@
   .card-body {
     --pad-t: 38px;
     --pad-b: 12px;
-    --avatar: 58px;
+    --avatar: 52px;
     --gap: 8px;
     --name: 1.08rem;
-    --control-h: 32px;
+    --control-h: 34px;
     --icon-btn: 24px;
     --tile-h: 60px;
+    --body-text: 10.5px;
+  }
+}
+
+/* Narrow (small-screen) width squeeze: everything scales down as one piece
+   so the 2x2 tiles, icons, buttons and text all fit without overflow. */
+@media (max-width: 639px) {
+  .card-body {
+    --pad-x: 12px;
+    --pad-t: 40px;
+    --pad-b: 14px;
+    --avatar: 56px;
+    --gap: 9px;
+    --name: 1.12rem;
+    --title: 0.78rem;
+    --control-h: 36px;
+    --top-h: 30px;
+    --icon-btn: 24px;
+    --tile-h: 66px;
     --body-text: 10.5px;
   }
 }

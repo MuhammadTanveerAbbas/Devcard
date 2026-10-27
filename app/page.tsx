@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { PixelBlastBackground } from "@/components/pixel-blast/pixel-blast-background";
 import { ProfileCard } from "@/components/profile-card";
 import {
@@ -63,7 +64,7 @@ const structuredData = {
 export default function Home() {
   return (
     <>
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useIsMobile } from "@/hooks/use-mobile";
 import "./pixel-blast.css";
 
 /**
@@ -29,6 +30,7 @@ export function PixelBlastBackground() {
   const [mounted, setMounted] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [failed, setFailed] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setMounted(true);
@@ -39,18 +41,24 @@ export function PixelBlastBackground() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
+  // Hide the decorative field on small screens: it saves GPU/battery on
+  // phones, and the page body colour underneath already matches the backdrop
+  // exactly, so no seam shows when the field is gone. Hooks above always run;
+  // only the JSX below is conditional.
+  if (isMobile) return null;
+
   const isDark = mounted && resolvedTheme === "dark";
   const showCanvas = mounted && !reduced && !failed;
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#FAFAFA] dark:bg-[#050607]">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-background dark:bg-[#050607]">
       {showCanvas ? (
         <PixelBlast
           variant="circle"
           pixelSize={isDark ? 3 : 4}
-          color={isDark ? "#6E767E" : "#C6CCD3"}
+          color={isDark ? "#6E767E" : "#4B5563"}
           patternScale={2.6}
-          patternDensity={isDark ? 2.0 : 1.3}
+          patternDensity={2.0}
           pixelSizeJitter={0.35}
           enableRipples
           rippleSpeed={0.3}
