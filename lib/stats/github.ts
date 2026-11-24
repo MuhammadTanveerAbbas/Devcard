@@ -4,6 +4,7 @@ import { cached, formatCount, getJson, HttpError, relativeDate, type SourceResul
 type GitHubUser = { followers: number; public_repos: number };
 type GitHubRepo = {
   name: string;
+  html_url: string;
   language: string | null;
   stargazers_count: number;
   updated_at: string;
@@ -38,7 +39,8 @@ export type GitHubStats = {
   CONTRIBUTIONS: number[];
   REPOSITORIES: DashboardData["REPOSITORIES"];
   contributionsTotal: number | null;
-  streak: number;
+  /** Null when the calendar request failed: an unknown streak is not zero. */
+  streak: number | null;
 };
 
 export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
@@ -70,12 +72,14 @@ export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
       const recent = [...repos].sort((a, b) => b.updated_at.localeCompare(a.updated_at)).slice(0, 4);
 
       const calendarData = calendar?.data?.user?.contributionsCollection?.contributionCalendar;
-      const contributionDays = calendarData?.weeks?.flatMap((week) => week.contributionDays) ?? [];
       const weeks = calendarData?.weeks ?? [];
+      const hasCalendar = Boolean(calendarData);
 
       // GitHub returns the current week with future days still empty. Count the
-      // streak from the last day that has actually happened.
+      // streak from the last day that has actually happened. Without a calendar
+      // the streak is unknown, so it stays null instead of becoming "0d".
       const today = new Date().toISOString().slice(0, 10);
+      const contributionDays = weeks.flatMap((week) => week.contributionDays);
       const pastDays = contributionDays.filter((day) => day.date <= today);
       let streak = 0;
       for (let i = pastDays.length - 1; i >= 0; i--) {
@@ -83,10 +87,11 @@ export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
         else break;
       }
 
-      const contributions = weeks
-        .slice(-WEEKS)
-        .flatMap((week) => week.contributionDays.map((day) => LEVEL[day.contributionLevel]));
-      while (contributions.length < WEEKS * 7) contributions.unshift(0);
+      const contributions = hasCalendar
+        ? weeks
+            .slice(-WEEKS)
+            .flatMap((week) => week.contributionDays.map((day) => LEVEL[day.contributionLevel]))
+        : [];
 
       return {
         GITHUB: {
@@ -100,12 +105,13 @@ export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
         CONTRIBUTIONS: contributions.slice(-WEEKS * 7),
         REPOSITORIES: recent.map((repo) => ({
           name: repo.name,
+          url: repo.html_url,
           language: repo.language ?? "Other",
           stars: formatCount(repo.stargazers_count),
           updated: relativeDate(repo.updated_at),
         })),
         contributionsTotal: calendarData?.totalContributions ?? null,
-        streak,
+        streak: hasCalendar ? streak : null,
       } satisfies GitHubStats;
     });
 

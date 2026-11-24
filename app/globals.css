@@ -7,6 +7,8 @@
 
 :root {
   --background: oklch(1 0 0);
+  --canvas: #ffffff;
+  --card-surface: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -41,27 +43,30 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* ─── Command center (the card's back face) ───────────────────────────────
-     Always dark, in both themes: the back is a control room, the front is the
-     card. Every value below is a token so the back never hardcodes a colour.
+     Light theme: a pale control room. The dark theme overrides the same
+     tokens below, so the back face follows the card instead of forcing one
+     palette. Every value is a token, so the back never hardcodes a colour.
      ---------------------------------------------------------------------- */
-  --ih-bg: oklch(0.145 0.005 265);
-  --ih-panel: oklch(0.185 0.006 265);
-  --ih-raised: oklch(0.255 0.008 265);
-  --ih-line: oklch(0.295 0.008 265);
-  --ih-edge: oklch(1 0 0 / 0.07);
-  --ih-text: oklch(0.965 0.002 265);
-  --ih-dim: oklch(0.75 0.008 265);
-  --ih-faint: oklch(0.63 0.008 265);
-  --ih-accent: oklch(0.82 0.16 152);
-  --ih-cell-0: oklch(0.245 0.006 265);
-  --ih-cell-1: oklch(0.42 0.08 152);
-  --ih-cell-2: oklch(0.55 0.11 152);
-  --ih-cell-3: oklch(0.68 0.14 152);
-  --ih-cell-4: oklch(0.82 0.16 152);
+  --ih-bg: oklch(0.985 0 0);
+  --ih-panel: oklch(0.965 0 0);
+  --ih-raised: oklch(0.935 0 0);
+  --ih-line: oklch(0.62 0 0);
+  --ih-edge: oklch(0 0 0 / 0.12);
+  --ih-text: oklch(0.145 0 0);
+  --ih-dim: oklch(0.38 0 0);
+  --ih-faint: oklch(0.47 0 0);
+  --ih-accent: oklch(0.52 0.13 152);
+  --ih-cell-0: oklch(0.93 0 0);
+  --ih-cell-1: oklch(0.78 0.08 152);
+  --ih-cell-2: oklch(0.68 0.11 152);
+  --ih-cell-3: oklch(0.58 0.13 152);
+  --ih-cell-4: oklch(0.48 0.15 152);
 }
 
 .dark {
   --background: oklch(0.145 0 0);
+  --canvas: #050607;
+  --card-surface: #000000;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -93,6 +98,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+
+  /* Command center, dark theme. Same token names, inverted surface. */
+  --ih-bg: oklch(0.145 0.005 265);
+  --ih-panel: oklch(0.185 0.006 265);
+  --ih-raised: oklch(0.255 0.008 265);
+  --ih-line: oklch(0.42 0.008 265);
+  --ih-edge: oklch(1 0 0 / 0.07);
+  --ih-text: oklch(0.965 0.002 265);
+  --ih-dim: oklch(0.75 0.008 265);
+  --ih-faint: oklch(0.63 0.008 265);
+  --ih-accent: oklch(0.82 0.16 152);
+  --ih-cell-0: oklch(0.245 0.006 265);
+  --ih-cell-1: oklch(0.42 0.08 152);
+  --ih-cell-2: oklch(0.55 0.11 152);
+  --ih-cell-3: oklch(0.68 0.14 152);
+  --ih-cell-4: oklch(0.82 0.16 152);
 }
 
 @theme inline {
@@ -100,6 +121,7 @@
   --font-sans: var(--font-veritas), 'LT Veritas', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-background: var(--background);
+  --color-canvas: var(--canvas);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -161,15 +183,11 @@
     overflow-x: clip;
   }
   body {
-    @apply bg-background text-foreground;
-    /* The page canvas, painted under the card. It matches the light and dark
-       surfaces exactly, so a collapsing mobile toolbar or a rounded screen
-       corner never shows a seam of a different colour. */
-    background-color: var(--background);
-  }
-
-  html.dark body {
-    background-color: #050607;
+    @apply text-foreground;
+    /* The page canvas is a token, not a theme-specific override. The card
+       surface sits on top of it with a 1px edge, so a mobile toolbar or a
+       rounded screen corner never shows a seam of a different colour. */
+    background-color: var(--canvas);
   }
 }
 
@@ -199,20 +217,15 @@
 }
 
 /* The card surface. Pure white in light, pure black in dark, so text keeps
-   full contrast no matter what animates underneath. */
+   full contrast no matter what animates underneath. One 1px inset edge, no
+   decorative blur: the surface is opaque, so a blur would only cost paint. */
 .card-surface {
-  background-color: #ffffff;
-  backdrop-filter: blur(18px) saturate(1.4);
-  box-shadow:
-    inset 0 0 0 1px rgb(13 18 24 / 0.07),
-    inset 0 1px 2px rgb(13 18 24 / 0.05);
+  background-color: var(--card-surface);
+  box-shadow: inset 0 0 0 1px rgb(13 18 24 / 0.12);
 }
 
 .dark .card-surface {
-  background-color: #000000;
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.09),
-    inset 0 1px 2px rgb(255 255 255 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 
 /* ─── Card rhythm ───────────────────────────────────────────────────────────
@@ -229,9 +242,9 @@
   --gap: 13px;
   --name: 1.42rem;
   --title: 0.9rem;
-  --top-h: 32px;
+  --top-h: 36px;
   --icon-btn: 28px;
-  --tile-h: 52px;
+  --tile-h: 56px;
   --body-text: 12px;
 }
 
@@ -274,9 +287,9 @@
     --gap: 9px;
     --name: 1.12rem;
     --title: 0.78rem;
-    --top-h: 30px;
+    --top-h: 34px;
     --icon-btn: 24px;
-    --tile-h: 48px;
+    --tile-h: 52px;
     --body-text: 10.5px;
   }
 }
@@ -380,9 +393,8 @@
   border: 1px solid transparent;
   border-radius: 0.5rem;
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: -0.01em;
   color: var(--ih-dim);
   transition:
     color 0.2s ease,
@@ -398,7 +410,7 @@
 }
 
 .ih-tabs [data-slot="tabs-trigger"]:focus-visible {
-  outline: 2px solid var(--ih-accent);
+  outline: 2px solid var(--ih-text);
   outline-offset: 1px;
   box-shadow: none;
 }
@@ -409,12 +421,17 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   outline: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ih-line) transparent;
 }
 
 .ih-tab-panel::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+
+.ih-tab-panel::-webkit-scrollbar-thumb {
+  background-color: var(--ih-line);
+  border-radius: 3px;
 }
 
 .ih-tab-panel[data-state="active"] {
@@ -454,11 +471,6 @@
   }
 }
 
-.ih-bar {
-  transform-origin: bottom;
-  animation: ih-rise 0.5s cubic-bezier(0.22, 0.8, 0.24, 1) both;
-}
-
 @keyframes ih-fade {
   from {
     opacity: 0;
@@ -470,15 +482,3 @@
   }
 }
 
-@keyframes ih-rise {
-  from {
-    opacity: 0.3;
-    transform: scaleY(0.15);
-  }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
-  }
-}
-
-/* avatar scale refreshed */

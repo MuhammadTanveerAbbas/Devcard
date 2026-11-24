@@ -43,21 +43,6 @@ const PROFILE = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function isValidUrl(v: string) {
-  try {
-    const u = new URL(v);
-    return u.protocol === "http:" || u.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-function safeOpen(url: string) {
-  const localFile = url.startsWith("/") && !url.startsWith("//");
-  if (isValidUrl(url) || localFile) window.open(url, "_blank", "noopener,noreferrer");
-}
-
-
 async function writeClipboard(text: string) {
   if (navigator.clipboard && window.isSecureContext) {
     try {
@@ -92,22 +77,27 @@ async function writeClipboard(text: string) {
 // its black and white identity; the controls drop the heavy 2px outline that
 // made every button shout at the same volume.
 
+// Full-opacity rings keep the 3:1 non-text contrast minimum in both themes.
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/45 dark:focus-visible:ring-white/55";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-white";
 
-const PILL = `flex h-[var(--top-h)] items-center justify-center gap-1.5 rounded-full border border-black/10 bg-white/70 px-2.5 font-display text-[10px] font-medium text-neutral-600 backdrop-blur-xl transition-colors disabled:pointer-events-none disabled:opacity-45 dark:border-white/15 dark:bg-white/[0.05] dark:text-white/70 sm:text-[11px] ${FOCUS_RING}`;
+// A transparent pseudo-element grows the hit area to 44px without changing
+// the visual size. The controls stay compact, the taps stay forgiving.
+const HIT_AREA = "relative after:absolute after:-inset-1 after:content-['']";
+
+const PILL = `${HIT_AREA} flex h-[var(--top-h)] items-center justify-center gap-1.5 rounded-full border border-black/20 bg-white px-2.5 font-display text-[10px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100 active:bg-neutral-200 disabled:pointer-events-none disabled:opacity-45 dark:border-white/20 dark:bg-neutral-900 dark:text-white/85 dark:hover:bg-neutral-800 dark:active:bg-neutral-700 sm:text-[11px] ${FOCUS_RING}`;
 
 const TILE_BASE = `flex min-h-[var(--tile-h)] items-center gap-2.5 rounded-xl border p-2.5 text-left transition-colors disabled:pointer-events-none disabled:opacity-45 ${FOCUS_RING}`;
 
-const TILE_SECONDARY = `${TILE_BASE} border-black/10 bg-black/[0.02] text-neutral-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-neutral-50`;
-
-const ICON_PRIMARY =
-  "flex size-[var(--icon-btn)] shrink-0 items-center justify-center rounded-lg bg-white text-neutral-900 dark:bg-neutral-900 dark:text-white";
+const TILE_SECONDARY = `${TILE_BASE} border-black/20 bg-white text-neutral-900 hover:bg-neutral-50 active:bg-neutral-100 dark:border-white/15 dark:bg-white/[0.04] dark:text-neutral-50 dark:hover:bg-white/[0.08] dark:active:bg-white/[0.12]`;
 
 const ICON_SECONDARY =
-  "flex size-[var(--icon-btn)] shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white/70 text-neutral-700 dark:border-white/10 dark:bg-white/[0.06] dark:text-white/80";
+  "flex size-[var(--icon-btn)] shrink-0 items-center justify-center rounded-lg border border-black/20 bg-white text-neutral-700 dark:border-white/15 dark:bg-white/[0.06] dark:text-white/80";
 
 const TILE_LABEL = "font-display text-[11px] font-semibold leading-tight sm:text-[11.5px]";
+
+const SOCIAL_BUTTON = `${HIT_AREA} icon-button grid size-10 place-items-center rounded-lg border border-black/20 bg-white text-neutral-700 transition-colors hover:bg-neutral-100 active:bg-neutral-200 dark:border-white/15 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.1] dark:active:bg-white/[0.16] ${FOCUS_RING}`;
+
 // ─── Brand mark ───────────────────────────────────────────────────────────────
 
 type BrandProps = { path: string; color: string; className?: string };
@@ -127,6 +117,7 @@ const subscribeToNothing = () => () => {};
 
 export function ProfileCard({ data }: { data: DashboardData }) {
   const { resolvedTheme, setTheme } = useTheme();
+  const [avatarSrc, setAvatarSrc] = useState("/Me.webp");
   const [imageError, setImageError] = useState(false);
   const [showPhoto, setShowPhoto] = useState(false);
   const [flipped, setFlipped] = useState(false);
@@ -165,6 +156,13 @@ export function ProfileCard({ data }: { data: DashboardData }) {
     setTheme(next);
     play(next);
   }, [isDark, setTheme, play]);
+
+  // A failed image request must not leave the card stuck on "MT". Try the
+  // other local asset once, then show the initials only if both fail.
+  const handleAvatarError = useCallback(() => {
+    if (avatarSrc === "/Me.webp") setAvatarSrc(PROFILE.profileImage);
+    else setImageError(true);
+  }, [avatarSrc]);
 
   const copyEmail = useCallback(async () => {
     const ok = await writeClipboard(PROFILE.email).catch(() => false);
@@ -325,13 +323,13 @@ export function ProfileCard({ data }: { data: DashboardData }) {
                   ) : (
                     <>
                       <Image
-                        src={PROFILE.profileImage}
+                        src={avatarSrc}
                         alt={PROFILE.name}
                         fill
-                        sizes="(max-width: 730px) 68px, 84px"
+                        unoptimized
                         className="avatar-main absolute inset-0 object-contain"
                         priority
-                        onError={() => setImageError(true)}
+                        onError={handleAvatarError}
                       />
                       <Image
                         src="/PFP.png"
@@ -339,6 +337,7 @@ export function ProfileCard({ data }: { data: DashboardData }) {
                         fill
                         sizes="(max-width: 730px) 68px, 84px"
                         className="avatar-swap absolute inset-0 object-contain"
+                        onError={() => setShowPhoto(false)}
                       />
                     </>
                   )}
@@ -354,16 +353,18 @@ export function ProfileCard({ data }: { data: DashboardData }) {
 
                 {/* Availability. Same pill language as the top bar buttons, so
                     it reads as part of the chrome and not as a separate alert. */}
-                <button
-                  type="button"
+                <a
+                  href={PROFILE.calUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${PROFILE.status}. ${PROFILE.statusDetail}. Open booking calendar`}
                   title={PROFILE.statusDetail}
-                  onClick={() => safeOpen(PROFILE.calUrl)}
                   className={`${PILL} mx-auto mt-[var(--gap)] max-w-full px-3`}
                 >
                   <CalendarDays className="size-3.5 shrink-0" aria-hidden="true" />
                   <span className="truncate">{PROFILE.status}</span>
                   <ChevronRight className="size-3.5 shrink-0" aria-hidden="true" />
-                </button>
+                </a>
               </div>
 
               {/* About text */}
@@ -373,36 +374,48 @@ export function ProfileCard({ data }: { data: DashboardData }) {
 
               {/* Three actions: two peers, then one white full-width button. */}
               <div className="mt-[var(--gap)] grid grid-cols-2 gap-2">
-                <button type="button" aria-label="My portfolio" onClick={() => safeOpen(PROFILE.portfolioUrl)} className={TILE_SECONDARY}>
+                <a href={PROFILE.portfolioUrl} target="_blank" rel="noopener noreferrer" aria-label="My portfolio" className={TILE_SECONDARY}>
                   <span className={ICON_SECONDARY}>
                     <User className="size-[14px] shrink-0" aria-hidden="true" />
                   </span>
                   <span className={TILE_LABEL}>My Portfolio</span>
-                </button>
+                </a>
 
-                <button type="button" aria-label="My studio" onClick={() => safeOpen(PROFILE.studioUrl)} className={TILE_SECONDARY}>
+                <a href={PROFILE.studioUrl} target="_blank" rel="noopener noreferrer" aria-label="My studio" className={TILE_SECONDARY}>
                   <span className={ICON_SECONDARY}>
                     <Layers className="size-[14px] shrink-0" aria-hidden="true" />
                   </span>
                   <span className={TILE_LABEL}>My Studio</span>
-                </button>
+                </a>
 
                 <button
                   type="button"
-                  aria-label="Copy email"
+                  aria-label={
+                    copyState === "done"
+                      ? "Email copied to clipboard"
+                      : copyState === "failed"
+                        ? "Could not copy email"
+                        : "Copy email"
+                  }
                   onClick={copyEmail}
-                  aria-live="polite"
-                  className={`col-span-2 flex h-[var(--tile-h)] items-center justify-center gap-2 rounded-xl border border-black/10 bg-white font-display text-[11px] font-semibold text-neutral-900 ${FOCUS_RING} dark:border-white/15 dark:bg-white dark:text-neutral-900`}
+                  className={`col-span-2 flex h-[var(--tile-h)] items-center justify-center gap-2 rounded-xl border border-black bg-black font-display text-[11px] font-semibold text-white transition-colors hover:bg-neutral-800 active:bg-neutral-700 dark:border-white dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 dark:active:bg-neutral-200 ${FOCUS_RING}`}
                 >
                   {copyState === "done" ? (
-                    <Check className="size-[15px] shrink-0 stroke-[2.5] text-emerald-600" aria-hidden="true" />
+                    <Check className="size-[15px] shrink-0 stroke-[2.5]" aria-hidden="true" />
                   ) : copyState === "failed" ? (
-                    <TriangleAlert className="size-[15px] shrink-0 text-red-500" aria-hidden="true" />
+                    <TriangleAlert className="size-[15px] shrink-0" aria-hidden="true" />
                   ) : (
                     <Mail className="size-[15px] shrink-0" aria-hidden="true" />
                   )}
                   {copyState === "done" ? "Copied!" : copyState === "failed" ? "Failed" : "Copy Email"}
                 </button>
+                <span className="sr-only" aria-live="polite">
+                  {copyState === "done"
+                    ? "Email copied to clipboard"
+                    : copyState === "failed"
+                      ? "Could not copy email"
+                      : ""}
+                </span>
               </div>
 
               {/* Social profiles. OS projects now live on the stats side. */}
@@ -424,14 +437,15 @@ export function ProfileCard({ data }: { data: DashboardData }) {
                       <li key={social.id}>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <button
-                              type="button"
+                            <a
+                              href={social.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               aria-label={social.label}
-                              onClick={() => safeOpen(social.href)}
-                              className={`icon-button grid size-9 place-items-center rounded-lg border border-black/10 bg-white/70 transition-colors active:bg-white disabled:pointer-events-none disabled:opacity-45 dark:border-white/10 dark:bg-white/[0.04] dark:active:bg-white/15 ${FOCUS_RING}`}
+                              className={SOCIAL_BUTTON}
                             >
                               <BrandMark path={social.path} color={social[markColor]} />
-                            </button>
+                            </a>
                           </TooltipTrigger>
                           <TooltipContent
                             side="top"

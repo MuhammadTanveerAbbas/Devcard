@@ -31,7 +31,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       },
       {
         label: "Streak",
-        value: github.data ? `${github.data.streak}d` : "—",
+        value: github.data?.streak != null ? `${github.data.streak}d` : "—",
         note: "current",
       },
       {

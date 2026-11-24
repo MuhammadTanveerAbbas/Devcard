@@ -8,6 +8,7 @@ export type SourceState = "live" | "missing" | "error";
 export type Kpi = { label: string; value: string; note: string };
 export type Repo = {
   name: string;
+  url: string;
   language: string;
   stars: string;
   updated: string;

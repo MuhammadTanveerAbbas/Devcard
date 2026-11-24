@@ -44,7 +44,7 @@ function Heatmap({ contributions, weeks }: { contributions: number[]; weeks: num
       height={height}
       role="img"
       aria-label={`Contribution grid for the last ${weeks} weeks`}
-      className="mx-auto block"
+      className="mx-auto block h-auto w-full max-w-[238px]"
     >
       {contributions.map((level, i) => (
         <rect
@@ -115,7 +115,7 @@ function SourceNotice({ state, message }: { state: SourceState; message?: string
       : (message ?? "GitHub data could not be loaded");
   return (
     <p
-      role="status"
+      role={state === "error" ? "alert" : "status"}
       className="mb-2 rounded-md border border-ih-line bg-ih-raised px-2 py-1.5 text-[9px] leading-snug text-ih-dim"
     >
       {text}
@@ -140,7 +140,7 @@ function CodePanel({
 }) {
   return (
     <div className="divide-y divide-ih-line">
-      <Block title="GitHub" meta={`${github.weeks} weeks`}>
+      <Block title="GitHub" meta={contributions.length ? `${github.weeks} weeks` : undefined}>
         <SourceNotice state={source} message={message} />
         {contributions.length ? (
           <Heatmap contributions={contributions} weeks={github.weeks} />
@@ -150,7 +150,7 @@ function CodePanel({
         <div className="mt-2.5 grid grid-cols-3 gap-1.5">
           <MiniStat label="Commits" value={github.commits} />
           <MiniStat label="Repos" value={github.repositories} />
-          <MiniStat label="Pull requests" value={github.pullRequests} />
+          <MiniStat label="Merged PRs" value={github.pullRequests} />
         </div>
       </Block>
 
@@ -158,13 +158,15 @@ function CodePanel({
         {repositories.length ? (
           <ul className="space-y-1">
             {repositories.map((repo) => (
-              <li
-                key={repo.name}
-                className="flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-ih-raised"
-              >
-                <span className="truncate font-display text-[10px] font-semibold text-ih-text">
+              <li key={repo.name} className="flex items-center gap-2 rounded-md px-1 py-1">
+                <a
+                  href={repo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="truncate font-display text-[10px] font-semibold text-ih-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ih-text"
+                >
                   {repo.name}
-                </span>
+                </a>
                 <span className="text-[8px] text-ih-faint">{repo.language}</span>
                 <span className="ml-auto text-[9px] tabular-nums text-ih-dim">{repo.stars} stars</span>
                 <span className="w-6 text-right text-[8px] tabular-nums text-ih-faint">{repo.updated}</span>
@@ -308,7 +310,7 @@ function QuoteTicker() {
         </span>
         <span
           key={index}
-          className="ih-quote-change flex min-h-[1.25rem] min-w-0 items-center text-[clamp(9px,2.2vw,11px)] leading-snug text-ih-dim"
+          className="ih-quote-change flex min-h-[1.25rem] min-w-0 items-center text-[11px] leading-snug text-ih-dim"
         >
           {quote.text}
         </span>
@@ -348,7 +350,7 @@ export function IhDashboard({
           className="ih-flip-btn flex h-8 items-center gap-1.5 rounded-full border border-ih-line bg-ih-raised px-3 font-display text-[10px] font-medium text-ih-text transition-colors hover:border-ih-accent/50 hover:bg-ih-raised/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ih-accent/70"
         >
           <ArrowLeft className="size-3" aria-hidden="true" />
-          Card
+          Back to card
         </button>
       </div>
 
