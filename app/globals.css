@@ -1,3 +1,5 @@
+/* Hallmark · redesign: card flip with a command center back · genre: modern-minimal · theme: existing (locked by request) · data: sample · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V, a stats back is what the category expects; the locked front and the personal command center framing carry it */
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -37,6 +39,25 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ─── Command center (the card's back face) ───────────────────────────────
+     Always dark, in both themes: the back is a control room, the front is the
+     card. Every value below is a token so the back never hardcodes a colour.
+     ---------------------------------------------------------------------- */
+  --ih-bg: oklch(0.145 0.005 265);
+  --ih-panel: oklch(0.185 0.006 265);
+  --ih-raised: oklch(0.255 0.008 265);
+  --ih-line: oklch(0.295 0.008 265);
+  --ih-edge: oklch(1 0 0 / 0.07);
+  --ih-text: oklch(0.965 0.002 265);
+  --ih-dim: oklch(0.75 0.008 265);
+  --ih-faint: oklch(0.63 0.008 265);
+  --ih-accent: oklch(0.82 0.16 152);
+  --ih-cell-0: oklch(0.245 0.006 265);
+  --ih-cell-1: oklch(0.42 0.08 152);
+  --ih-cell-2: oklch(0.55 0.11 152);
+  --ih-cell-3: oklch(0.68 0.14 152);
+  --ih-cell-4: oklch(0.82 0.16 152);
 }
 
 .dark {
@@ -114,20 +135,36 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-ih-bg: var(--ih-bg);
+  --color-ih-panel: var(--ih-panel);
+  --color-ih-raised: var(--ih-raised);
+  --color-ih-line: var(--ih-line);
+  --color-ih-text: var(--ih-text);
+  --color-ih-dim: var(--ih-dim);
+  --color-ih-faint: var(--ih-faint);
+  --color-ih-accent: var(--ih-accent);
+  --color-ih-cell-0: var(--ih-cell-0);
+  --color-ih-cell-1: var(--ih-cell-1);
+  --color-ih-cell-2: var(--ih-cell-2);
+  --color-ih-cell-3: var(--ih-cell-3);
+  --color-ih-cell-4: var(--ih-cell-4);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body {
+    /* The flip rotates a card wider than its box for a few frames. Clip, never
+       scroll: a sideways wobble on a profile page reads as a bug. */
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
-    /* The pixel blast layer sits fixed behind everything at z index -10. This
-       colour paints the page canvas, under that layer, and it matches the layer
-       exactly, so a collapsing mobile toolbar, a rubber band scroll or a
-       rounded screen corner never shows a seam of a different colour.
-       Uses the adaptive --background variable so light/white theme tracks the
-       theme colour instead of a hardcoded hex. */
+    /* The page canvas, painted under the card. It matches the light and dark
+       surfaces exactly, so a collapsing mobile toolbar or a rounded screen
+       corner never shows a seam of a different colour. */
     background-color: var(--background);
   }
 
@@ -188,14 +225,13 @@
   --pad-x: 16px;
   --pad-t: 54px;
   --pad-b: 22px;
-  --avatar: 72px;
+  --avatar: 84px;
   --gap: 13px;
   --name: 1.42rem;
   --title: 0.9rem;
-  --control-h: 43px;
   --top-h: 32px;
   --icon-btn: 28px;
-  --tile-h: 76px;
+  --tile-h: 52px;
   --body-text: 12px;
 }
 
@@ -204,13 +240,12 @@
     --pad-x: 14px;
     --pad-t: 44px;
     --pad-b: 16px;
-    --avatar: 60px;
+    --avatar: 72px;
     --gap: 10px;
     --name: 1.2rem;
     --title: 0.8rem;
-    --control-h: 38px;
     --icon-btn: 26px;
-    --tile-h: 66px;
+    --tile-h: 48px;
     --body-text: 11px;
   }
 }
@@ -219,12 +254,11 @@
   .card-body {
     --pad-t: 38px;
     --pad-b: 12px;
-    --avatar: 52px;
+    --avatar: 64px;
     --gap: 8px;
     --name: 1.08rem;
-    --control-h: 34px;
     --icon-btn: 24px;
-    --tile-h: 60px;
+    --tile-h: 46px;
     --body-text: 10.5px;
   }
 }
@@ -236,14 +270,13 @@
     --pad-x: 12px;
     --pad-t: 40px;
     --pad-b: 14px;
-    --avatar: 56px;
+    --avatar: 68px;
     --gap: 9px;
     --name: 1.12rem;
     --title: 0.78rem;
-    --control-h: 36px;
     --top-h: 30px;
     --icon-btn: 24px;
-    --tile-h: 66px;
+    --tile-h: 48px;
     --body-text: 10.5px;
   }
 }
@@ -258,3 +291,194 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── Avatar photo swap ──────────────────────────────────────────────────────
+   The illustrated mark is the resting state. Pointer devices swap to the real
+   photo on hover; touch devices swap on tap through the data-show attribute.
+   -------------------------------------------------------------------------- */
+.avatar-main,
+.avatar-swap {
+  transition: opacity 0.45s ease;
+}
+
+.avatar-main {
+  opacity: 1;
+}
+
+.avatar-swap {
+  opacity: 0;
+}
+
+.avatar-box[data-show="true"] .avatar-main {
+  opacity: 0;
+}
+
+.avatar-box[data-show="true"] .avatar-swap {
+  opacity: 1;
+}
+
+/* ─── Card flip ─────────────────────────────────────────────────────────────
+   The frame keeps its spin, only the two faces turn. The front stays in flow so
+   it owns the card height, the back is pinned to the same box and scrolls
+   inside it. No height animation anywhere.
+   -------------------------------------------------------------------------- */
+
+.flip-scene {
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+}
+
+.flip-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.flip-inner {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* ─── Command center surface ──────────────────────────────────────────────── */
+
+.ih-surface {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.05rem;
+  background-color: var(--ih-bg);
+  color: var(--ih-text);
+  box-shadow: inset 0 0 0 1px var(--ih-edge);
+}
+
+/* The tab strip: quiet until chosen, then a raised neutral. Plain rules sit
+   outside Tailwind's layers, so they beat the component's own utilities. */
+
+.ih-tabs [data-slot="tabs-list"] {
+  height: 2.25rem;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 0.625rem;
+}
+
+.ih-tabs [data-slot="tabs-trigger"] {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ih-dim);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ih-tabs [data-slot="tabs-trigger"][data-state="active"] {
+  border-color: var(--ih-line);
+  background-color: var(--ih-raised);
+  color: var(--ih-text);
+  box-shadow: none;
+}
+
+.ih-tabs [data-slot="tabs-trigger"]:focus-visible {
+  outline: 2px solid var(--ih-accent);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.ih-tab-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  outline: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ih-tab-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.ih-tab-panel[data-state="active"] {
+  animation: ih-fade 0.26s ease both;
+}
+
+/* Each quote remounts on change, so the fade replays. Reduced motion is
+   handled by the global rule near the top of this file. */
+.ih-quote-change {
+  animation: ih-fade 0.28s ease-out both;
+}
+
+/* Connector between project tiles. It grows from the icon edge towards the
+   next icon in a short stagger. The global reduced-motion rule makes it
+   appear at once. */
+.ih-project:not(:last-child):not(:nth-child(4n))::after {
+  content: "";
+  position: absolute;
+  top: 19px;
+  left: calc(50% + 18px);
+  width: calc(100% - 28px);
+  height: 1px;
+  background: var(--ih-line);
+  transform-origin: left center;
+  animation: ih-link-in 0.3s ease-out both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+@keyframes ih-link-in {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.ih-bar {
+  transform-origin: bottom;
+  animation: ih-rise 0.5s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+@keyframes ih-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ih-rise {
+  from {
+    opacity: 0.3;
+    transform: scaleY(0.15);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* avatar scale refreshed */

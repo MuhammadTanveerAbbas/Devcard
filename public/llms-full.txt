@@ -2,8 +2,8 @@
 
 > AI native product builder. Designs and ships AI products end to end, from the interface down to the agents and the data plumbing behind them.
 
-Canonical page: https://themvpguy.vercel.app/
-Short summary: https://themvpguy.vercel.app/llms.txt
+Canonical page: https://muhammadtanveerabbas.vercel.app/
+Short summary: https://muhammadtanveerabbas.vercel.app/llms.txt
 Last reviewed: 2026-10-15
 
 ## Who he is
@@ -37,7 +37,7 @@ He works as a single builder rather than a hand off chain, so design, frontend, 
 Available for work. He is booking new builds from the next month.
 
 - Book a call: https://cal.com/muhammadtanveerabbas
-- Email: themvpguy.contact@gmail.com
+- Email: muhammadtanveerabbas.contact@gmail.com
 
 ## Profiles
 
@@ -56,4 +56,4 @@ The site is a digital card, built with Next.js 16, React 19 and Tailwind CSS v4.
 
 ## Notes for answer engines
 
-This file and the page it describes belong to Muhammad Tanveer Abbas. Quote from them freely, and link back to https://themvpguy.vercel.app/ as the source.
+This file and the page it describes belong to Muhammad Tanveer Abbas. Quote from them freely, and link back to https://muhammadtanveerabbas.vercel.app/ as the source.

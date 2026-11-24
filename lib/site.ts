@@ -8,7 +8,7 @@
  * The visible card content lives in `components/profile-card.tsx`.
  */
 
-export const SITE_URL = "https://themvpguy.vercel.app";
+export const SITE_URL = "https://muhammadtanveerabbas.vercel.app";
 
 export const SITE_NAME = "DevCard";
 
@@ -21,8 +21,8 @@ export const PROFILE = {
   /** Short handle, used by the Open Graph profile tags. */
   username: "muhammadtanveerabbas",
   jobTitle: "AI Native Product Builder",
-  email: "themvpguy.contact@gmail.com",
-  photo: "/Me.webp",
+  email: "muhammadtanveerabbas.contact@gmail.com",
+  photo: "/Me.jfif",
   resume: "/Resume.pdf",
   calUrl: "https://cal.com/muhammadtanveerabbas",
   availability: "Available for work",

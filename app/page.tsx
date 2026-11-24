@@ -1,6 +1,5 @@
-import Script from "next/script";
-import { PixelBlastBackground } from "@/components/pixel-blast/pixel-blast-background";
 import { ProfileCard } from "@/components/profile-card";
+import { getDashboardData } from "@/lib/stats";
 import {
   DESCRIPTION,
   PROFILE,
@@ -61,18 +60,21 @@ const structuredData = {
   ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const data = await getDashboardData();
+
   return (
     <>
-      <Script
+      {/* JSON-LD belongs in a plain script tag. next/script renders it through
+          React and logs a warning during SSR. */}
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <PixelBlastBackground />
       <main className="relative z-10 flex min-h-svh items-center justify-center px-3 py-3 sm:py-6">
-        <ProfileCard />
+        <ProfileCard data={data} />
       </main>
     </>
   );

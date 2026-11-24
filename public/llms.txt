@@ -10,13 +10,13 @@ This site is a single page digital card. It carries the profile, the resume, the
 - Role: AI Native Product Builder
 - Availability: available for work, booking new builds from the next month
 - Stack: Next.js, TypeScript, Tailwind CSS, Node.js, Supabase, Stripe, Vercel
-- Email: themvpguy.contact@gmail.com
+- Email: muhammadtanveerabbas.contact@gmail.com
 - Booking: https://cal.com/muhammadtanveerabbas
 
 ## Pages
 
-- [Digital card](https://themvpguy.vercel.app/): the main page, a 3D profile card with links, skills and contact options
-- [Resume](https://themvpguy.vercel.app/Resume.pdf): the current CV as a PDF
+- [Digital card](https://muhammadtanveerabbas.vercel.app/): the main page, a 3D profile card with links, skills and contact options
+- [Resume](https://muhammadtanveerabbas.vercel.app/Resume.pdf): the current CV as a PDF
 - [Book a call](https://cal.com/muhammadtanveerabbas): the live calendar link
 
 ## Profiles
@@ -29,4 +29,4 @@ This site is a single page digital card. It carries the profile, the resume, the
 
 ## Optional
 
-- [Full profile text](https://themvpguy.vercel.app/llms-full.txt): the long form markdown version of this file
+- [Full profile text](https://muhammadtanveerabbas.vercel.app/llms-full.txt): the long form markdown version of this file

@@ -2,7 +2,7 @@
 
 An interactive 3D developer profile card. Share your links, social profiles and payment options in one polished page.
 
-Live demo: [themvpguy.vercel.app](https://themvpguy.vercel.app/)
+Live demo: [muhammadtanveerabbas.vercel.app](https://muhammadtanveerabbas.vercel.app/)
 
 ![DevCard preview](app/opengraph-image.png)
 
@@ -350,7 +350,7 @@ Works on any Node.js 20.9 or newer host, such as Railway, Render or Fly.io.
 
 ## License
 
-MIT, copyright [Muhammad Tanveer Abbas](https://themvpguy.vercel.app/)
+MIT, copyright [Muhammad Tanveer Abbas](https://muhammadtanveerabbas.vercel.app/)
 
 - X: [x.com/m_tanveerabbas](https://x.com/m_tanveerabbas)
 - LinkedIn: [linkedin.com/in/muhammadtanveerabbas](https://linkedin.com/in/muhammadtanveerabbas)
