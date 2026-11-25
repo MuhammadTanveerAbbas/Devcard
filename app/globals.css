@@ -175,6 +175,15 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* No scrollbars anywhere. Content stays reachable by wheel, trackpad and
+       touch; only the visual track is removed. */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
   html,
   body {
@@ -291,6 +300,50 @@
     --icon-btn: 24px;
     --tile-h: 52px;
     --body-text: 10.5px;
+  }
+}
+
+/* A narrow but tall screen has room for the full card. Keep the compact
+   squeeze only when height is tight, so the stats face does not scroll. */
+@media (max-width: 639px) and (min-height: 731px) {
+  .card-body {
+    --pad-x: 16px;
+    --pad-t: 54px;
+    --pad-b: 22px;
+    --avatar: 84px;
+    --gap: 13px;
+    --name: 1.42rem;
+    --title: 0.9rem;
+    --top-h: 36px;
+    --icon-btn: 28px;
+    --tile-h: 56px;
+    --body-text: 12px;
+  }
+}
+
+/* Tall screens keep the project title and its tiles together as one block and
+   centre the pair. Short screens stay top aligned so nothing is clipped. */
+@media (min-height: 731px) {
+  .ih-os-block {
+    justify-content: center;
+  }
+  .ih-lead-block {
+    padding-top: 14px;
+  }
+}
+
+/* Short screens: the stats face has less room, so the dashboard tightens its
+   own rhythm. Nothing is hidden behind a scrollbar; all rows stay visible. */
+@media (max-height: 730px) {
+  .ih-heatmap {
+    max-height: 40px;
+  }
+  .ih-repo-row {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .ih-repos-footer {
+    display: none;
   }
 }
 
@@ -421,17 +474,12 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   outline: none;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ih-line) transparent;
+  scrollbar-width: none;
 }
 
 .ih-tab-panel::-webkit-scrollbar {
-  width: 6px;
-}
-
-.ih-tab-panel::-webkit-scrollbar-thumb {
-  background-color: var(--ih-line);
-  border-radius: 3px;
+  display: none;
+  width: 0;
 }
 
 .ih-tab-panel[data-state="active"] {

@@ -69,7 +69,11 @@ export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
       ]);
 
       const stars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-      const recent = [...repos].sort((a, b) => b.updated_at.localeCompare(a.updated_at)).slice(0, 4);
+      // "Best" means most starred. The date breaks ties between equally
+      // starred repos so the list stays stable across fetches.
+      const best = [...repos]
+        .sort((a, b) => b.stargazers_count - a.stargazers_count || b.updated_at.localeCompare(a.updated_at))
+        .slice(0, 5);
 
       const calendarData = calendar?.data?.user?.contributionsCollection?.contributionCalendar;
       const weeks = calendarData?.weeks ?? [];
@@ -103,7 +107,7 @@ export async function fetchGitHub(): Promise<SourceResult<GitHubStats>> {
           weeks: WEEKS,
         },
         CONTRIBUTIONS: contributions.slice(-WEEKS * 7),
-        REPOSITORIES: recent.map((repo) => ({
+        REPOSITORIES: best.map((repo) => ({
           name: repo.name,
           url: repo.html_url,
           language: repo.language ?? "Other",

@@ -20,32 +20,32 @@ export const PROFILE = {
   lastName: "Tanveer Abbas",
   /** Short handle, used by the Open Graph profile tags. */
   username: "muhammadtanveerabbas",
-  jobTitle: "AI Native Product Builder",
+  jobTitle: "Software Developer | Technical Product Partner",
   email: "muhammadtanveerabbas.contact@gmail.com",
   photo: "/Me.jfif",
   resume: "/Resume.pdf",
   calUrl: "https://cal.com/muhammadtanveerabbas",
   availability: "Available for work",
   about:
-    "I design and ship AI native products end to end. Interfaces, agents, and the plumbing behind them.",
+    "I design, build, and deliver B2B SaaS products and internal tools for startup founders and SMEs.",
 } as const;
 
-/** Meta description, used by search engines and the manifest. 124 characters. */
+/** Meta description, used by search engines and the manifest. 130 characters. */
 export const DESCRIPTION =
-  "Digital card of Muhammad Tanveer Abbas, AI native product builder. Book a call, open the resume or reach any social profile.";
+  "Digital card of Muhammad Tanveer Abbas, software developer and technical product partner. Book a call or reach any social profile.";
 
 /**
- * Open Graph and X description. 115 characters, so it survives the tighter
+ * Open Graph and X description. 121 characters, so it survives the tighter
  * truncation on WhatsApp, Facebook and LinkedIn link previews.
  */
 export const SOCIAL_DESCRIPTION =
-  "Muhammad Tanveer Abbas, AI native product builder. Book a call, open the resume or reach any profile from one page.";
+  "Muhammad Tanveer Abbas, software developer and technical product partner. Book a call or reach any profile from one page.";
 
 /** Search terms this page should rank for. */
 export const KEYWORDS = [
   "Muhammad Tanveer Abbas",
-  "AI native product builder",
-  "AI product engineer",
+  "software developer",
+  "technical product partner",
   "full stack developer",
   "Next.js developer",
   "React developer",

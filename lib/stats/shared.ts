@@ -1,4 +1,4 @@
-/** Shared helpers for server-side stats. No secrets leave this folder. */
+/** Shared helpers for server-side stats. Secrets stay on the server only. */
 
 import type { SourceState } from "@/lib/dashboard-data";
 

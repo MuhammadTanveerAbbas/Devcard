@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   ArrowLeft,
+  ArrowUpRight,
   Blocks,
   Code2,
   Eye,
@@ -44,7 +45,7 @@ function Heatmap({ contributions, weeks }: { contributions: number[]; weeks: num
       height={height}
       role="img"
       aria-label={`Contribution grid for the last ${weeks} weeks`}
-      className="mx-auto block h-auto w-full max-w-[238px]"
+      className="ih-heatmap mx-auto block h-auto w-full max-w-[238px]"
     >
       {contributions.map((level, i) => (
         <rect
@@ -69,19 +70,21 @@ function Block({
   icon,
   children,
   centered = false,
+  className = "",
 }: {
   title: string;
   meta?: string;
   icon?: React.ReactNode;
   children: React.ReactNode;
   centered?: boolean;
+  className?: string;
 }) {
   return (
-    <section className="py-2.5 first:pt-0 last:pb-0">
+    <section className={`py-2.5 first:pt-0 last:pb-0 ${className}`}>
       <header
         className={
           centered
-            ? "mb-3 flex flex-col items-center gap-0.5 text-center"
+            ? "mb-3 flex items-center justify-center gap-1.5 text-center"
             : "mb-2 flex items-baseline justify-between gap-2"
         }
       >
@@ -89,7 +92,16 @@ function Block({
           {icon ? <span className="text-ih-faint">{icon}</span> : null}
           <h3 className="text-[10px] font-semibold text-ih-text">{title}</h3>
         </span>
-        {meta ? <span className="text-[9px] text-ih-faint">{meta}</span> : null}
+        {meta ? (
+          centered ? (
+            <span className="flex items-center gap-1.5 text-[9px] text-ih-faint">
+              <span aria-hidden="true">|</span>
+              {meta}
+            </span>
+          ) : (
+            <span className="text-[9px] text-ih-faint">{meta}</span>
+          )
+        ) : null}
       </header>
       {children}
     </section>
@@ -129,18 +141,28 @@ function CodePanel({
   github,
   repositories,
   contributions,
+  handle,
   source,
   message,
 }: {
   github: DashboardData["GITHUB"];
   repositories: DashboardData["REPOSITORIES"];
   contributions: number[];
+  handle: string;
   source: SourceState;
   message?: string;
 }) {
+  const profileUrl = `https://github.com/${handle.replace(/^@/, "")}`;
+
   return (
-    <div className="divide-y divide-ih-line">
-      <Block title="GitHub" meta={contributions.length ? `${github.weeks} weeks` : undefined}>
+    <div className="flex min-h-full flex-col divide-y divide-ih-line">
+      <Block
+        title="GitHub"
+        meta={contributions.length ? `${github.weeks} weeks` : undefined}
+        centered
+        icon={<Github className="size-3" aria-hidden="true" />}
+        className="ih-lead-block"
+      >
         <SourceNotice state={source} message={message} />
         {contributions.length ? (
           <Heatmap contributions={contributions} weeks={github.weeks} />
@@ -154,29 +176,49 @@ function CodePanel({
         </div>
       </Block>
 
-      <Block title="Repositories" meta="recent">
+      <section className="flex flex-1 flex-col py-2.5">
+        <header className="mb-2 flex items-baseline justify-between gap-2">
+          <h3 className="text-[10px] font-semibold text-ih-text">Repositories</h3>
+          <span className="text-[9px] text-ih-faint">top starred</span>
+        </header>
+
         {repositories.length ? (
-          <ul className="space-y-1">
+          <ul className="shrink-0 divide-y divide-ih-line overflow-hidden rounded-md border border-ih-line bg-ih-panel">
             {repositories.map((repo) => (
-              <li key={repo.name} className="flex items-center gap-2 rounded-md px-1 py-1">
+              <li key={repo.name} className="ih-repo-row flex items-center gap-2 px-2 py-1.5">
+                <span className="size-1.5 shrink-0 rounded-full bg-ih-line" aria-hidden="true" />
                 <a
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate font-display text-[10px] font-semibold text-ih-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ih-text"
+                  className="min-w-0 flex-1 truncate font-display text-[10px] font-semibold text-ih-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ih-text"
                 >
                   {repo.name}
                 </a>
-                <span className="text-[8px] text-ih-faint">{repo.language}</span>
-                <span className="ml-auto text-[9px] tabular-nums text-ih-dim">{repo.stars} stars</span>
-                <span className="w-6 text-right text-[8px] tabular-nums text-ih-faint">{repo.updated}</span>
+                <span className="shrink-0 text-[8px] text-ih-faint">{repo.language}</span>
+                <span className="shrink-0 text-[9px] tabular-nums text-ih-dim">{repo.stars} stars</span>
+                <span className="w-6 shrink-0 text-right text-[8px] tabular-nums text-ih-faint">{repo.updated}</span>
               </li>
             ))}
           </ul>
         ) : (
           <p className="py-2 text-[9px] text-ih-faint">No repositories to show</p>
         )}
-      </Block>
+
+        {/* Pinned to the free space on tall screens so the panel ends with an
+            action instead of an empty block. */}
+        <div className="ih-repos-footer mt-auto pt-2.5">
+          <a
+            href={`${profileUrl}?tab=repositories`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1 rounded-md border border-ih-line bg-ih-raised px-2 py-1.5 font-display text-[9px] font-medium text-ih-dim transition-colors hover:border-ih-accent/50 hover:text-ih-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ih-accent/70"
+          >
+            View all on GitHub
+            <ArrowUpRight className="size-3 shrink-0" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
@@ -227,8 +269,8 @@ function OpenSourcePanel({
   message?: string;
 }) {
   return (
-    <div className="divide-y divide-ih-line">
-      <Block title="Open Source | Github" centered icon={<Github className="size-3" aria-hidden="true" />}>
+    <div className="flex min-h-full flex-col divide-y divide-ih-line">
+      <Block title="Open Source | Github" centered icon={<Github className="size-3" aria-hidden="true" />} className="ih-lead-block">
         <SourceNotice state={source} message={message} />
         <div className="grid grid-cols-2 divide-x divide-ih-line py-0.5">
           <div className="flex items-center justify-center gap-1.5">
@@ -253,7 +295,14 @@ function OpenSourcePanel({
         </div>
       </Block>
 
-      <Block title="My OS Project" centered icon={<Blocks className="size-3" aria-hidden="true" />}>
+      {/* Header and tiles stay one block. On tall screens the whole block
+          centres in the free space, so the title never drifts away. */}
+      <Block
+        title="My OS Project"
+        centered
+        icon={<Blocks className="size-3" aria-hidden="true" />}
+        className="ih-os-block flex flex-1 flex-col"
+      >
         <ProjectGrid />
       </Block>
     </div>
@@ -303,7 +352,7 @@ function QuoteTicker() {
   const Icon = QUOTE_ICONS[quote.kind];
 
   return (
-    <div className="w-full border-t border-ih-line pt-2">
+    <div className="w-full shrink-0 border-t border-ih-line pt-2">
       <div className="flex items-center justify-center gap-2 text-center">
         <span className="grid size-5 shrink-0 place-items-center rounded-md border border-ih-line bg-ih-raised text-ih-accent">
           <Icon className="size-3.5" aria-hidden="true" />
@@ -329,6 +378,7 @@ export function IhDashboard({
   onFlipBack: () => void;
 }) {
   const { AVATAR, CONTRIBUTIONS, GITHUB, HANDLE, KPIS, MESSAGES, REPOSITORIES, SOURCES } = data;
+  const [tab, setTab] = useState("code");
 
   return (
     <div className="ih-surface flex h-full flex-col overflow-hidden rounded-[1.05rem]">
@@ -373,7 +423,7 @@ export function IhDashboard({
           })}
         </div>
 
-        <Tabs defaultValue="code" className="ih-tabs flex min-h-0 flex-1 flex-col gap-2">
+        <Tabs value={tab} onValueChange={setTab} className="ih-tabs flex min-h-0 flex-1 flex-col gap-2">
           <TabsList className="grid h-8 w-full grid-cols-2 gap-0.5 rounded-lg border border-ih-line bg-ih-panel p-0.5">
             <TabsTrigger value="code">
               <Code2 className="size-3.5" aria-hidden="true" />
@@ -390,21 +440,23 @@ export function IhDashboard({
               github={GITHUB}
               repositories={REPOSITORIES}
               contributions={CONTRIBUTIONS}
+              handle={HANDLE}
               source={SOURCES.github}
               message={MESSAGES.github}
             />
           </TabsContent>
-          <TabsContent value="open-source" className="ih-tab-panel flex flex-col">
+          <TabsContent value="open-source" className="ih-tab-panel">
             <OpenSourcePanel
               github={GITHUB}
               source={SOURCES.github}
               message={MESSAGES.github}
             />
-            <div className="flex w-full flex-1 items-center justify-center">
-              <QuoteTicker />
-            </div>
           </TabsContent>
         </Tabs>
+
+        {/* The quote belongs to the project side only. The repos panel keeps
+            its own footer link instead. */}
+        {tab === "open-source" ? <QuoteTicker /> : null}
       </div>
     </div>
   );

@@ -28,11 +28,11 @@ type CopyState = "idle" | "done" | "failed";
 
 const PROFILE = {
   name: "Muhammad Tanveer Abbas",
-  title: "AI Native Product Builder",
+  title: "Software Developer | Technical Product Partner",
   status: "Available for work",
   statusDetail: "Booking new builds from next month",
   about:
-    "I design and ship AI native products end to end interfaces, agents, and the plumbing behind them.",
+    "I design, build, and deliver B2B SaaS products and internal tools for startup founders and SMEs.",
   profileImage: "/Me.jfif",
   email: "muhammadtanveerabbas.contact@gmail.com",
   calUrl: "https://cal.com/muhammadtanveerabbas",
@@ -257,7 +257,9 @@ export function ProfileCard({ data }: { data: DashboardData }) {
           >
 
             {/* ── Top bar ─────────────────────────────────────────────── */}
-            <div className="absolute inset-x-0 top-0 z-20 grid grid-cols-2 items-center px-3 pt-2.5">
+            {/* No z-index here. The back face stacks after this one in the DOM,
+                so it stays on top if a browser ignores backface-visibility. */}
+            <div className="absolute inset-x-0 top-0 grid grid-cols-2 items-center px-3 pt-2.5">
               <button
                 type="button"
                 aria-label={mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Switch theme"}

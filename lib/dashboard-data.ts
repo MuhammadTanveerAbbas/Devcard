@@ -37,7 +37,7 @@ export type DashboardData = {
    configured GitHub username when the data is built. */
 export const STATS_IDENTITY = {
   AVATAR: "/Me.webp",
-  ROLE: "AI native product builder",
+  ROLE: "Software developer and technical product partner",
 } as const;
 
 /* Real project links. Shown in the Open Source tab of the stats side. */
